@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"github.com/jimxl/gream"
 	"github.com/jimxl/gream/web"
 	"github.com/jimxl/gream/web/controller"
 )
@@ -14,10 +13,10 @@ type HomeController struct {
 	controller.BaseController
 }
 
-func (self *HomeController) IndexJsonAction() {
-	self.RenderJson(&gream.H{"name": self.Param("name")})
+func (c *HomeController) IndexJsonAction() {
+	c.RenderJson(&web.H{"name": c.Param("name")})
 }
 
-func (self *HomeController) IndexTextAction() {
-	self.RenderText("hello " + self.Param("name"))
+func (c *HomeController) IndexTextAction() {
+	c.RenderText("hello " + c.Param("name"))
 }
