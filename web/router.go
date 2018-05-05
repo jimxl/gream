@@ -9,6 +9,5 @@ type Router struct {
 }
 
 func (self *Router) Draw() {
-	self.GET("/home_json/:name", &r.Opt{To: "home#index_json"})
-	// self.GET("/home_text/:name", &controllers.HomeController{}, "IndexText")
+	self.GET("/home_json/:name", "home#index_json")
 }
