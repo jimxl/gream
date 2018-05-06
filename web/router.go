@@ -18,4 +18,6 @@ func Draw() {
 	{
 		namespace.GET("/home/:name", "home#index_text")
 	}
+
+	r.Resources("users")
 }
