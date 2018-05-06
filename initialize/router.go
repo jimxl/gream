@@ -1,9 +1,9 @@
 package initialize
 
-import "gbs/web"
 import _ "gbs/web/controllers"
+import _ "gbs/web/controllers/scope"
+import "gbs/web"
 
 func init() {
-	router := &web.Router{}
-	router.Draw()
+	web.Draw()
 }

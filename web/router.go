@@ -1,13 +1,21 @@
 package web
 
 import (
-	r "github.com/jimxl/gream/web/router"
+	router "github.com/jimxl/gream/web/router"
 )
 
-type Router struct {
-	r.Helper
-}
+func Draw() {
+	r := router.Create()
 
-func (self *Router) Draw() {
-	self.GET("/home_json/:name", "home#index_json")
+	r.GET("/home_json/:name", "home#index_json")
+
+	scope := r.Scope("/scope")
+	{
+		scope.GET("/home_json/:name", "home#index")
+	}
+
+	namespace := r.Namespace("/admin")
+	{
+		namespace.GET("/home/:name", "home#index_text")
+	}
 }
