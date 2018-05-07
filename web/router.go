@@ -8,6 +8,7 @@ func Draw() {
 	r := router.Create()
 
 	r.GET("/home_json/:name", "home#index_json")
+	r.GET("/test/:name", "scope/home#index")
 
 	scope := r.Scope("/scope")
 	{
