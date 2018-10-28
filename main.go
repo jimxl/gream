@@ -3,7 +3,7 @@ package main
 import (
 	_ "gbs/initialize"
 
-	"github.com/jimxl/gream"
+	"gbs/gream"
 )
 
 func main() {

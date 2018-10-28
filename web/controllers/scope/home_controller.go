@@ -1,8 +1,8 @@
 package scope
 
 import (
-	"github.com/jimxl/gream/web"
-	"github.com/jimxl/gream/web/controller"
+	"gbs/gream/web"
+	"gbs/gream/web/controller"
 )
 
 func init() {

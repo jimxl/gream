@@ -1,7 +1,7 @@
 package web
 
 import (
-	router "github.com/jimxl/gream/web/router"
+	router "gbs/gream/web/router"
 )
 
 func Draw() {
