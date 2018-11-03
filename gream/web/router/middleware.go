@@ -6,43 +6,41 @@ import (
 	"time"
 
 	"gbs/gream/logger"
-
-	"github.com/gin-gonic/gin"
 )
 
 func init() {
-	gin.SetMode(gin.ReleaseMode)
-	re.router.Use(loggerMiddleWare())
-	re.router.Use(gin.Recovery())
+	re.router.Use(loggerMiddleWare)
 }
 
-func loggerMiddleWare() gin.HandlerFunc {
-	return func(c *gin.Context) {
+func loggerMiddleWare(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		t := time.Now()
 
-		requestMethod := c.Request.Method
-		url := c.Request.URL.RequestURI()
+		requestMethod := r.Method
+		url := r.RequestURI
 
 		logger.Info(
 			fmt.Sprintf(
 				"Started %s \"%s\" for %s at %s",
 				requestMethod,
 				url,
-				c.ClientIP(),
+				r.RemoteAddr,
 				t.Format("2006-01-02 15:04:05 +0800"),
 			))
 
-		c.Next()
+		next.ServeHTTP(w, r)
+
 		latency := time.Since(t)
-		status := c.Writer.Status()
+		status := w.Header().Get("Status Code")
 
 		logger.Info(
 			fmt.Sprintf(
 				"Completed %d %s in %v",
 				status,
-				http.StatusText(status),
+				// http.StatusText(status),
+				status,
 				latency,
 			))
 
-	}
+	})
 }

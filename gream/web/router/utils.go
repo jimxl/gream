@@ -18,13 +18,6 @@ func Run() {
 	re.run()
 }
 
-func Create() *Scope {
-	return &Scope{
-		basePath:  "/",
-		scopePath: "",
-	}
-}
-
 type Opt struct {
 	To     string
 	As     string
@@ -35,7 +28,7 @@ type Opt struct {
 var controllerScopeRe = regexp.MustCompile("(.*/)?(.*)#(.*)$")
 
 // 这个地方可以方便的再加入另外的opt参数，方便做参数的定制化 具体可以参考rails的方式
-func requestHandle(scopePath string, controllerAndAction string, args ...Opt) (string, string, func(*gin.Context)) {
+func requestHandle(path string, controllerAndAction string) (http.ResponseWriter, *http.Request) {
 	controllerName, actionName, path := getName(controllerAndAction)
 	controllerClassName := scopePath + "/" + path + controllerName + "Controller"
 	return controllerClassName, actionName, func(c *gin.Context) {
