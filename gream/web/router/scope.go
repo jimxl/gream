@@ -23,6 +23,7 @@ func (scope *Scope) handle(controllerAndAction string) *mux.Route {
 	controllerName, actionName, dir := getName(controllerAndAction)
 	controllerClassName := scope.path + "/" + dir + controllerName + "Controller"
 	return scope.route.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// TODO: 要加上类型转换判断,防止错误
 		response := w.(*Response)
 		controller, err := createController(controllerClassName, response, r)
 		if err != nil {
