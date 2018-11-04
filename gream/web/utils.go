@@ -8,11 +8,9 @@ import (
 	"gbs/gream/logger"
 
 	"github.com/olekukonko/tablewriter"
-
-	"github.com/gin-gonic/gin"
 )
 
-type H = gin.H
+type H = map[string]interface{}
 
 var controllers = map[string]reflect.Type{}
 var controllerScopeRe = regexp.MustCompile("web/controllers(.*)$")

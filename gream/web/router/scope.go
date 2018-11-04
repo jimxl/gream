@@ -1,5 +1,86 @@
 package router
 
+import (
+	"errors"
+	"net/http"
+	"reflect"
+	"regexp"
+
+	"gbs/gream/logger"
+	"gbs/gream/web"
+	"gbs/rgo/rstring"
+
+	"github.com/gorilla/mux"
+)
+
+type Scope struct {
+	route *mux.Route
+	path  string
+}
+
+func (scope *Scope) handle(controllerAndAction string) *mux.Route {
+	controllerName, actionName, dir := getName(controllerAndAction)
+	controllerClassName := scope.path + "/" + dir + controllerName + "Controller"
+	return scope.route.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		controller, err := createController(controllerClassName, w, r)
+		if err != nil {
+			w.WriteHeader(http.StatusNotFound)
+			w.Write([]byte(err.Error()))
+			return
+		}
+
+		err = callAction(controller, actionName, controllerName)
+		if err != nil {
+			w.WriteHeader(http.StatusNotFound)
+			w.Write([]byte(err.Error()))
+			return
+		}
+	})
+}
+
+var controllerScopeRe = regexp.MustCompile("(.*/)?(.*)#(.*)$")
+
+func getName(controllerAndAction string) (controller, action, dir string) {
+	info := controllerScopeRe.FindStringSubmatch(rstring.Downcase(controllerAndAction))
+	controller = rstring.Capitalize(info[2])
+	action = rstring.Capitalize(info[3])
+	dir = info[1]
+	return
+}
+
+func createController(name string, w http.ResponseWriter, r *http.Request) (*reflect.Value, error) {
+	controllerType := web.GetController(name)
+	if controllerType == nil {
+		err := errors.New("controller invalid")
+		logger.Error(err.Error())
+		return nil, err
+	}
+	controllerInstance := reflect.New(controllerType.Elem())
+	method := controllerInstance.MethodByName("InitFromContext")
+	if !method.IsValid() {
+		err := errors.New("controller invalid")
+		logger.Error(err.Error())
+		return nil, err
+	}
+	method.Call([]reflect.Value{reflect.ValueOf(w), reflect.ValueOf(r)})
+	return &controllerInstance, nil
+}
+
+func callAction(controller *reflect.Value, name string, controllerName string) error {
+	action := controller.MethodByName(name)
+	if !action.IsValid() {
+		err := errors.New("action invalid")
+		logger.Error(err.Error())
+		return err
+	}
+	action.Call([]reflect.Value{})
+
+	// if controller.FieldByName("RenderDefaultFile").Bool() {
+	controller.MethodByName("Render").Call([]reflect.Value{})
+	// }
+	return nil
+}
+
 // // Resources TODO: 要实现Only和Expect方法，用于关闭某些默认路由
 // // TODO:  由于gin不支持 GET /users/new  和 GET /users/:id 这样的路由，会冲突只能换成 GET /user/:id
 // func (scope *Scope) Resources(name string, opts ...Opt) *Scope {

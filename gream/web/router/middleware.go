@@ -9,7 +9,7 @@ import (
 )
 
 func init() {
-	re.router.Use(loggerMiddleWare)
+	re.Use(loggerMiddleWare)
 }
 
 func loggerMiddleWare(next http.Handler) http.Handler {
@@ -35,8 +35,7 @@ func loggerMiddleWare(next http.Handler) http.Handler {
 
 		logger.Info(
 			fmt.Sprintf(
-				"Completed %d %s in %v",
-				status,
+				"Completed %s in %v",
 				// http.StatusText(status),
 				status,
 				latency,

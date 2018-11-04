@@ -5,30 +5,40 @@ import (
 
 	"gbs/gream/web"
 
-	"github.com/gin-gonic/gin"
+	"github.com/gorilla/mux"
+	"github.com/json-iterator/go"
 )
 
 type BaseController struct {
-	context *gin.Context
-
+	responseWriter    http.ResponseWriter
+	request           *http.Request
 	RenderDefaultFile bool
 	response          Response
+	parameters        map[string]string
 }
 
-func (self *BaseController) InitFromGinContext(context *gin.Context) {
+var jsonBuilder = jsoniter.ConfigCompatibleWithStandardLibrary
+
+func (self *BaseController) InitFromContext(w http.ResponseWriter, r *http.Request) {
+	self.responseWriter = w
+	self.request = r
 	self.response.StatusCode = http.StatusOK
 	self.RenderDefaultFile = true
-	self.context = context
+	self.parameters = mux.Vars(r)
 }
 
 func (self *BaseController) RenderText(content string) {
 	self.RenderDefaultFile = false
-	self.context.String(self.response.StatusCode, content)
+	self.responseWriter.WriteHeader(self.response.StatusCode)
+	self.responseWriter.Write([]byte(content))
 }
 
 func (self *BaseController) RenderJson(json *web.H) {
 	self.RenderDefaultFile = false
-	self.context.JSON(self.response.StatusCode, json)
+	self.responseWriter.Header().Set("Content-Type", "application/json")
+	content, _ := jsonBuilder.Marshal(json)
+	self.responseWriter.WriteHeader(self.response.StatusCode)
+	self.responseWriter.Write([]byte(content))
 }
 
 func (self *BaseController) Render() {
@@ -36,21 +46,5 @@ func (self *BaseController) Render() {
 }
 
 func (self *BaseController) Param(name string) string {
-	return self.context.Param(name)
-}
-
-func (self *BaseController) Query(name string) string {
-	return self.context.Query(name)
-}
-
-func (self *BaseController) DefaultQuery(name string, defaultValue string) string {
-	return self.context.DefaultQuery(name, defaultValue)
-}
-
-func (self *BaseController) PostForm(name string) string {
-	return self.context.PostForm(name)
-}
-
-func (self *BaseController) DefaultPostForm(name string, defaultValue string) string {
-	return self.context.DefaultPostForm(name, defaultValue)
+	return self.parameters[name]
 }
