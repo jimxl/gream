@@ -8,6 +8,7 @@ import (
 
 	"gbs/gream/logger"
 	"gbs/gream/web"
+	. "gbs/gream/web/response"
 	"gbs/rgo/rstring"
 
 	"github.com/gorilla/mux"
@@ -22,7 +23,8 @@ func (scope *Scope) handle(controllerAndAction string) *mux.Route {
 	controllerName, actionName, dir := getName(controllerAndAction)
 	controllerClassName := scope.path + "/" + dir + controllerName + "Controller"
 	return scope.route.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		controller, err := createController(controllerClassName, w, r)
+		response := w.(*Response)
+		controller, err := createController(controllerClassName, response, r)
 		if err != nil {
 			w.WriteHeader(http.StatusNotFound)
 			w.Write([]byte(err.Error()))
@@ -48,7 +50,7 @@ func getName(controllerAndAction string) (controller, action, dir string) {
 	return
 }
 
-func createController(name string, w http.ResponseWriter, r *http.Request) (*reflect.Value, error) {
+func createController(name string, response *Response, r *http.Request) (*reflect.Value, error) {
 	controllerType := web.GetController(name)
 	if controllerType == nil {
 		err := errors.New("controller invalid")
@@ -62,7 +64,7 @@ func createController(name string, w http.ResponseWriter, r *http.Request) (*ref
 		logger.Error(err.Error())
 		return nil, err
 	}
-	method.Call([]reflect.Value{reflect.ValueOf(w), reflect.ValueOf(r)})
+	method.Call([]reflect.Value{reflect.ValueOf(response), reflect.ValueOf(r)})
 	return &controllerInstance, nil
 }
 

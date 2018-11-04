@@ -7,7 +7,7 @@ import (
 func Draw() {
 
 	GET("/home_json/{name}", "home#index_json")
-	GET("/test/:name", "scope/home#index")
+	GET("/test/{name}", "scope/home#index")
 
 	// scope := r.Scope("/scope")
 	// {

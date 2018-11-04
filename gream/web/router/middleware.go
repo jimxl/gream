@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"gbs/gream/logger"
+	. "gbs/gream/web/response"
 )
 
 func init() {
@@ -28,15 +29,17 @@ func loggerMiddleWare(next http.Handler) http.Handler {
 				t.Format("2006-01-02 15:04:05 +0800"),
 			))
 
-		next.ServeHTTP(w, r)
+		response := &Response{ResponseWriter: w}
+
+		next.ServeHTTP(response, r)
 
 		latency := time.Since(t)
-		status := w.Header().Get("Status Code")
+		status := response.StatusCode()
 
 		logger.Info(
 			fmt.Sprintf(
-				"Completed %s in %v",
-				// http.StatusText(status),
+				"Completed %s %v in %v",
+				http.StatusText(status),
 				status,
 				latency,
 			))
