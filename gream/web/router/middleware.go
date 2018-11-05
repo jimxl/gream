@@ -10,6 +10,7 @@ import (
 	. "gbs/gream/web/response"
 )
 
+// TODO: 移到web/middleware里面去添加实现
 func init() {
 	Use(loggerMiddleWare)
 }
