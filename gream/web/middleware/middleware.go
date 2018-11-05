@@ -13,10 +13,10 @@ var re *mux.Router
 
 func init() {
 	re = http_router.Router()
-	re.Use(baseMiddleware)
+	re.Use(responseMiddleware)
 }
 
-func baseMiddleware(next http.Handler) http.Handler {
+func responseMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		response := &Response{ResponseWriter: w}
 		next.ServeHTTP(response, r)
