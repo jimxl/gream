@@ -5,3 +5,4 @@
 3. 完善response类型
 4. 完善个POST 等所有路由
 5. 可以用fasthttp 替换 net/http库
+6. 应该自己开发一个包管理器，能达到rubygems的效果

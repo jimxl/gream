@@ -2,14 +2,16 @@ package router
 
 import (
 	"fmt"
-	"gbs/gream/config"
 	"net/http"
 	"strings"
+
+	"gbs/gream/config"
+	"gbs/gream/web/http_router"
 
 	"github.com/gorilla/mux"
 )
 
-var re = mux.NewRouter()
+var re = http_router.Router()
 
 func Run() {
 
