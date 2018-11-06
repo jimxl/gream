@@ -32,7 +32,7 @@ func loggerMiddleWare(next http.Handler) http.Handler {
 
 		logger.Info(
 			fmt.Sprintf(
-				"Completed %s %v in %v",
+				"Completed %s %v in %v\n\n",
 				http.StatusText(status),
 				status,
 				latency,

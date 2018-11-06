@@ -13,7 +13,7 @@ import (
 type H = map[string]interface{}
 
 var controllers = map[string]reflect.Type{}
-var controllerScopeRe = regexp.MustCompile("web/controllers(.*)$")
+var controllerScopeRe = regexp.MustCompile("web/controllers?(.*)$")
 
 type RInfo struct {
 	Prefix, Verb, URI, ControllerAndAction string

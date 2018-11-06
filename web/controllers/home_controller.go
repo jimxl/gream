@@ -17,6 +17,6 @@ func (c *HomeController) IndexJson() {
 	c.RenderJson(&web.H{"name": c.Param("name")})
 }
 
-func (c *HomeController) IndexText() {
+func (c *HomeController) Index() {
 	c.RenderText("hello " + c.Param("name"))
 }

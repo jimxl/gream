@@ -2,8 +2,8 @@ package router
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
+	"path/filepath"
 	"reflect"
 	"regexp"
 
@@ -15,14 +15,31 @@ import (
 	"github.com/gorilla/mux"
 )
 
-type Scope struct {
+type GScope struct {
 	route *mux.Route
 	path  string
 }
 
-func (scope *Scope) handle(controllerAndAction string) *mux.Route {
+func (s *GScope) Scope(name string) *GScope {
+	s.route.PathPrefix("/" + name)
+	s.path = filepath.Join(s.path, name)
+	return s
+}
+
+func (s *GScope) Namespace(name string) *GScope {
+	s.route.PathPrefix("/" + name)
+	return s
+}
+
+func (s *GScope) GET(path, controllerAndAction string) *GScope {
+	s.route.Methods("GET").Path(path)
+	s.handle(controllerAndAction)
+	return s
+}
+
+func (scope *GScope) handle(controllerAndAction string) *mux.Route {
 	controllerName, actionName, dir := getName(controllerAndAction)
-	controllerClassName := scope.path + "/" + dir + controllerName + "Controller"
+	controllerClassName := filepath.Join("/", scope.path, dir, controllerName) + "Controller"
 	return scope.route.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// TODO: 要加上类型转换判断,防止错误
 		response := w.(*Response)
@@ -33,7 +50,6 @@ func (scope *Scope) handle(controllerAndAction string) *mux.Route {
 			return
 		}
 
-		fmt.Println(actionName)
 		err = callAction(controller, actionName, controllerName)
 		if err != nil {
 			w.WriteHeader(http.StatusNotFound)
@@ -43,7 +59,7 @@ func (scope *Scope) handle(controllerAndAction string) *mux.Route {
 	})
 }
 
-var controllerScopeRe = regexp.MustCompile("(.*/)?(.*)#(.*)$")
+var controllerScopeRe = regexp.MustCompile("(\\w*/)?(\\w*)#(\\w*)$")
 
 func getName(controllerAndAction string) (controller, action, dir string) {
 	info := controllerScopeRe.FindStringSubmatch(rstring.Downcase(controllerAndAction))

@@ -11,7 +11,11 @@ import (
 	"github.com/gorilla/mux"
 )
 
-var re = http_router.Router()
+var re *mux.Router
+
+func init() {
+	re = http_router.Router()
+}
 
 func Run() {
 
@@ -26,12 +30,25 @@ func Run() {
 	srv.ListenAndServe()
 }
 
-func GET(path string, controllerAndAction string) *Scope {
-	scope := &Scope{
-		route: re.Methods("GET").Path(path),
+func GET(path string, controllerAndAction string) *GScope {
+	scope := &GScope{
+		route: re.NewRoute(),
 	}
-	scope.handle(controllerAndAction)
-	return scope
+	return scope.GET(path, controllerAndAction)
+}
+
+func Scope(path string) *GScope {
+	scope := &GScope{
+		route: re.NewRoute(),
+	}
+	return scope.Scope(path)
+}
+
+func Namespace(path string) *GScope {
+	scope := &GScope{
+		route: re.NewRoute(),
+	}
+	return scope.Namespace(path)
 }
 
 func printUrls() {
