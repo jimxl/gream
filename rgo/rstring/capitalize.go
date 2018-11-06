@@ -1,9 +1,9 @@
 package rstring
 
 import (
-	"strings"
+	"github.com/huandu/xstrings"
 )
 
 func Capitalize(str string) string {
-	return strings.Title(Downcase(str))
+	return xstrings.ToCamelCase(str)
 }

@@ -2,6 +2,7 @@ package router
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"reflect"
 	"regexp"
@@ -32,6 +33,7 @@ func (scope *Scope) handle(controllerAndAction string) *mux.Route {
 			return
 		}
 
+		fmt.Println(actionName)
 		err = callAction(controller, actionName, controllerName)
 		if err != nil {
 			w.WriteHeader(http.StatusNotFound)

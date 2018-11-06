@@ -6,8 +6,10 @@ require (
 	github.com/fatih/structs v1.1.0 // indirect
 	github.com/gin-contrib/sse v0.0.0-20170109093832-22d885f9ecc7 // indirect
 	github.com/gin-gonic/gin v1.3.0
+	github.com/gobuffalo/flect v0.0.0-20181104133451-1f6e9779237a
 	github.com/golang/protobuf v1.2.0 // indirect
 	github.com/gorilla/mux v1.6.2
+	github.com/huandu/xstrings v1.2.0
 	github.com/jinzhu/inflection v0.0.0-20180308033659-04140366298a
 	github.com/json-iterator/go v1.1.5
 	github.com/koding/multiconfig v0.0.0-20171124222453-69c27309b2d7

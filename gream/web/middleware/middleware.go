@@ -17,13 +17,6 @@ func init() {
 	Use(loggerMiddleWare)
 }
 
-func responseMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		response := &Response{ResponseWriter: w}
-		next.ServeHTTP(response, r)
-	})
-}
-
 type HandlerFunc func(response *Response, request *http.Request)
 
 func (f HandlerFunc) ServeHTTP(w http.ResponseWriter, r *http.Request) {
