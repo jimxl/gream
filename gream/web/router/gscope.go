@@ -32,9 +32,13 @@ func (s *GScope) Namespace(name string) *GScope {
 }
 
 func (s *GScope) GET(path, controllerAndAction string) *GScope {
-	s.route.Methods("GET").Path(path)
-	s.handle(controllerAndAction)
-	return s
+	scope := &GScope{
+		route: re.NewRoute().PathPrefix(s.path),
+		path:  s.path,
+	}
+	scope.route.Methods("GET").Path(path)
+	scope.handle(controllerAndAction)
+	return scope
 }
 
 func (scope *GScope) handle(controllerAndAction string) *mux.Route {
@@ -42,6 +46,7 @@ func (scope *GScope) handle(controllerAndAction string) *mux.Route {
 	controllerClassName := filepath.Join("/", scope.path, dir, controllerName) + "Controller"
 	return scope.route.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// TODO: 要加上类型转换判断,防止错误
+		logger.Debugf("controller: %s, action: %s in %s", controllerName, actionName, controllerClassName)
 		response := w.(*Response)
 		controller, err := createController(controllerClassName, response, r)
 		if err != nil {

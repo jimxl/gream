@@ -1,9 +1,8 @@
 package main
 
 import (
-	_ "gbs/initialize"
-
 	"gbs/gream"
+	_ "gbs/initialize"
 )
 
 func main() {
