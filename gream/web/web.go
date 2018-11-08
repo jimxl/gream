@@ -11,8 +11,6 @@ import (
 	"github.com/olekukonko/tablewriter"
 )
 
-type H = http_router.H
-
 var controllers = map[string]reflect.Type{}
 var controllerScopeRe = regexp.MustCompile("web/controllers?(.*)$")
 

@@ -3,7 +3,6 @@ package controller
 import (
 	"net/http"
 
-	"gbs/gream/web"
 	"gbs/gream/web/http_router"
 )
 
@@ -23,7 +22,7 @@ func (controller *BaseController) RenderText(format string, values ...interface{
 	controller.context.String(http.StatusOK, format)
 }
 
-func (controller *BaseController) RenderJson(json *web.H) {
+func (controller *BaseController) RenderJson(json *http_router.H) {
 	controller.RenderDefaultFile = false
 	controller.context.JSON(http.StatusOK, json)
 }

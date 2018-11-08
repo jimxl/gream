@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"gbs/gream/web"
-	"gbs/gream/web/controller"
 )
 
 func init() {
@@ -10,7 +9,7 @@ func init() {
 }
 
 type HomeController struct {
-	controller.BaseController
+	web.BaseController
 }
 
 func (c *HomeController) IndexJson() {
