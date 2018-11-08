@@ -8,6 +8,7 @@ import (
 	"github.com/olekukonko/tablewriter"
 )
 
+// TODO: 移动到子模块中去
 type RInfo struct {
 	Prefix, Verb, URI, ControllerAndAction string
 }
