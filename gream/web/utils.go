@@ -6,11 +6,12 @@ import (
 	"regexp"
 
 	"gbs/gream/logger"
+	"gbs/gream/web/http_router"
 
 	"github.com/olekukonko/tablewriter"
 )
 
-type H = map[string]interface{}
+type H = http_router.H
 
 var controllers = map[string]reflect.Type{}
 var controllerScopeRe = regexp.MustCompile("web/controllers?(.*)$")
@@ -43,6 +44,10 @@ func Register(controller Controller) {
 
 func GetController(name string) reflect.Type {
 	return controllers[name]
+}
+
+func Run() {
+	http_router.Run()
 }
 
 func Debug() {

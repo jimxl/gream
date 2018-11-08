@@ -4,45 +4,34 @@ import (
 	"net/http"
 
 	"gbs/gream/web"
-	. "gbs/gream/web/response"
-
-	"github.com/gorilla/mux"
-	"github.com/json-iterator/go"
+	"gbs/gream/web/http_router"
 )
 
 type BaseController struct {
-	request           *http.Request
+	context *http_router.Context
+
 	RenderDefaultFile bool
-	response          *Response
-	parameters        map[string]string
 }
 
-var jsonBuilder = jsoniter.ConfigCompatibleWithStandardLibrary
-
-func (self *BaseController) InitFromContext(response *Response, r *http.Request) {
-	self.request = r
-	self.response = response
-	self.response.WriteHeader(http.StatusOK)
-	self.RenderDefaultFile = true
-	self.parameters = mux.Vars(r)
+func (controller *BaseController) InitFromContext(c *http_router.Context) {
+	controller.context = c
+	controller.RenderDefaultFile = true
 }
 
-func (self *BaseController) RenderText(content string) {
-	self.RenderDefaultFile = false
-	self.response.Write([]byte(content))
+func (controller *BaseController) RenderText(format string, values ...interface{}) {
+	controller.RenderDefaultFile = false
+	controller.context.String(http.StatusOK, format)
 }
 
-func (self *BaseController) RenderJson(json *web.H) {
-	self.RenderDefaultFile = false
-	self.response.Header().Set("Content-Type", "application/json")
-	content, _ := jsonBuilder.Marshal(json)
-	self.response.Write([]byte(content))
+func (controller *BaseController) RenderJson(json *web.H) {
+	controller.RenderDefaultFile = false
+	controller.context.JSON(http.StatusOK, json)
 }
 
-func (self *BaseController) Render() {
+func (controller *BaseController) Render() {
 
 }
 
-func (self *BaseController) Param(name string) string {
-	return self.parameters[name]
+func (controller *BaseController) Param(name string) string {
+	return controller.context.Param(name)
 }

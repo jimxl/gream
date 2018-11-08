@@ -2,33 +2,33 @@ package middleware
 
 import (
 	"fmt"
+	"gbs/gream/web/http_router"
 	"net/http"
 	"time"
 
 	"gbs/gream/logger"
-	. "gbs/gream/web/response"
 )
 
-func loggerMiddleWare(next http.Handler) http.Handler {
-	return HandlerFunc(func(response *Response, r *http.Request) {
+func loggerMiddleWare() http_router.HandlerFunc {
+	return func(c *http_router.Context) {
 		t := time.Now()
 
-		requestMethod := r.Method
-		url := r.RequestURI
+		requestMethod := c.Request.Method
+		url := c.Request.RequestURI
 
 		logger.Info(
 			fmt.Sprintf(
 				"Started %s \"%s\" for %s at %s",
 				requestMethod,
 				url,
-				r.RemoteAddr,
+				c.ClientIP(),
 				t.Format("2006-01-02 15:04:05 +0800"),
 			))
 
-		next.ServeHTTP(response, r)
+		c.Next()
 
 		latency := time.Since(t)
-		status := response.StatusCode()
+		status := c.Writer.Status()
 
 		logger.Info(
 			fmt.Sprintf(
@@ -38,5 +38,5 @@ func loggerMiddleWare(next http.Handler) http.Handler {
 				latency,
 			))
 
-	})
+	}
 }

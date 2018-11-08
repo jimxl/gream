@@ -9,59 +9,48 @@ import (
 
 	"gbs/gream/logger"
 	"gbs/gream/web"
-	. "gbs/gream/web/response"
+	"gbs/gream/web/http_router"
 	"gbs/rgo/rstring"
-
-	"github.com/gorilla/mux"
 )
 
 type GScope struct {
-	route *mux.Route
-	path  string
+	path           string
+	classNamespace string
 }
 
-func (s *GScope) Scope(name string) *GScope {
-	s.route.PathPrefix("/" + name)
-	s.path = filepath.Join(s.path, name)
-	return s
+// func (s *GScope) Scope(name string) *GScope {
+// 	s.route.PathPrefix("/" + name)
+// 	s.path = filepath.Join(s.path, name)
+// 	return s
+// }
+
+// func (s *GScope) Namespace(name string) *GScope {
+// 	s.route.PathPrefix("/" + name)
+// 	return s
+// }
+
+func (s *GScope) GET(path, controllerAndAction string) {
+	fullPath := filepath.Join(s.path, path)
+	http_router.GET(fullPath, s.handle(controllerAndAction))
 }
 
-func (s *GScope) Namespace(name string) *GScope {
-	s.route.PathPrefix("/" + name)
-	return s
-}
-
-func (s *GScope) GET(path, controllerAndAction string) *GScope {
-	scope := &GScope{
-		route: re.NewRoute().PathPrefix(s.path),
-		path:  s.path,
-	}
-	scope.route.Methods("GET").Path(path)
-	scope.handle(controllerAndAction)
-	return scope
-}
-
-func (scope *GScope) handle(controllerAndAction string) *mux.Route {
+func (s *GScope) handle(controllerAndAction string) func(*http_router.Context) {
 	controllerName, actionName, dir := getName(controllerAndAction)
-	controllerClassName := filepath.Join("/", scope.path, dir, controllerName) + "Controller"
-	return scope.route.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// TODO: 要加上类型转换判断,防止错误
+	controllerClassName := filepath.Join("/", s.path, dir, controllerName) + "Controller"
+	return func(c *http_router.Context) {
 		logger.Debugf("controller: %s, action: %s in %s", controllerName, actionName, controllerClassName)
-		response := w.(*Response)
-		controller, err := createController(controllerClassName, response, r)
+		controller, err := createController(controllerClassName, c)
 		if err != nil {
-			w.WriteHeader(http.StatusNotFound)
-			w.Write([]byte(err.Error()))
+			c.String(http.StatusNotFound, err.Error())
 			return
 		}
 
 		err = callAction(controller, actionName, controllerName)
 		if err != nil {
-			w.WriteHeader(http.StatusNotFound)
-			w.Write([]byte(err.Error()))
+			c.String(http.StatusNotFound, err.Error())
 			return
 		}
-	})
+	}
 }
 
 var controllerScopeRe = regexp.MustCompile("(\\w*/)?(\\w*)#(\\w*)$")
@@ -74,7 +63,7 @@ func getName(controllerAndAction string) (controller, action, dir string) {
 	return
 }
 
-func createController(name string, response *Response, r *http.Request) (*reflect.Value, error) {
+func createController(name string, c *http_router.Context) (*reflect.Value, error) {
 	controllerType := web.GetController(name)
 	if controllerType == nil {
 		err := errors.New("controller invalid")
@@ -88,7 +77,7 @@ func createController(name string, response *Response, r *http.Request) (*reflec
 		logger.Error(err.Error())
 		return nil, err
 	}
-	method.Call([]reflect.Value{reflect.ValueOf(response), reflect.ValueOf(r)})
+	method.Call([]reflect.Value{reflect.ValueOf(c)})
 	return &controllerInstance, nil
 }
 

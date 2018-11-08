@@ -2,27 +2,11 @@ package middleware
 
 import (
 	"gbs/gream/web/http_router"
-	. "gbs/gream/web/response"
-
-	"net/http"
-
-	"github.com/gorilla/mux"
 )
 
-var re *mux.Router
+var re *http_router.Engine
 
 func init() {
 	re = http_router.Router()
-	re.Use(responseMiddleware)
-	Use(loggerMiddleWare)
-}
-
-type HandlerFunc func(response *Response, request *http.Request)
-
-func (f HandlerFunc) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	f(w.(*Response), r)
-}
-
-func Use(mwf ...mux.MiddlewareFunc) {
-	re.Use(mwf...)
+	http_router.Use(loggerMiddleWare())
 }
