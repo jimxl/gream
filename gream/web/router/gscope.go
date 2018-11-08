@@ -8,7 +8,7 @@ import (
 	"regexp"
 
 	"gbs/gream/logger"
-	"gbs/gream/web"
+	"gbs/gream/web/controller"
 	"gbs/gream/web/http_router"
 	"gbs/rgo/rstring"
 )
@@ -64,7 +64,7 @@ func getName(controllerAndAction string) (controller, action, dir string) {
 }
 
 func createController(name string, c *http_router.Context) (*reflect.Value, error) {
-	controllerType := web.GetController(name)
+	controllerType := controller.GetController(name)
 	if controllerType == nil {
 		err := errors.New("controller invalid")
 		logger.Error(err.Error())

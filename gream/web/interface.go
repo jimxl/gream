@@ -10,3 +10,7 @@ type BaseController = controller.BaseController
 type Controller = controller.Controller
 
 type H = http_router.H
+
+func Register(c Controller) {
+	controller.Register(c)
+}
