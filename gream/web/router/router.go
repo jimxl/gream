@@ -61,12 +61,10 @@ func (r *Router) getRoute(method, path string, opt H) *route {
 	}
 	if optPath, ok := opt["path"]; ok {
 		route.urlSpace = urlJoin(optPath, r.urlSpace)
-		delete(opt, "path")
 	}
 
 	if optModule, ok := opt["module"]; ok {
 		route.moduleSpace = urlJoin(optModule, r.moduleSpace)
-		delete(opt, "module")
 	}
 	route.fullpath = urlJoin(route.urlSpace, path)
 	return &route
