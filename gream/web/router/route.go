@@ -24,6 +24,7 @@ type route struct {
 	action      string
 	urlSpace    string
 	moduleSpace string
+	fullpath    string
 
 	controllerInstance *reflect.Value
 }

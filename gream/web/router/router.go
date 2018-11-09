@@ -15,13 +15,9 @@ var (
 	Scope     = r.Scope
 )
 
-// func Scope(path string) *GScope {
-// 	return scope.Scope(path)
-// }
-
-// func Namespace(path string) *GScope {
-// 	return scope.Namespace(path)
-// }
+func urlJoin(paths ...string) string {
+	return filepath.Join(paths...)
+}
 
 type Router struct {
 	urlSpace    string
@@ -29,15 +25,8 @@ type Router struct {
 }
 
 func (r *Router) GET(path string, opt H) {
-	route := route{
-		path:        path,
-		opt:         opt,
-		method:      http.MethodGet,
-		urlSpace:    r.urlSpace,
-		moduleSpace: r.moduleSpace,
-	}
-	fullPath := filepath.Join(r.urlSpace, path)
-	http_router.GET(fullPath, route.getHandle())
+	route := r.getRoute(http.MethodGet, path, opt)
+	http_router.GET(route.fullpath, route.getHandle())
 }
 
 func (r *Router) Namespace(space string) *Router {
@@ -62,6 +51,23 @@ func (r *Router) Scope(arg interface{}) *Router {
 	return &router
 }
 
-func urlJoin(paths ...string) string {
-	return filepath.Join(paths...)
+func (r *Router) getRoute(method, path string, opt H) *route {
+	route := route{
+		path:        path,
+		opt:         opt,
+		method:      http.MethodGet,
+		urlSpace:    r.urlSpace,
+		moduleSpace: r.moduleSpace,
+	}
+	if optPath, ok := opt["path"]; ok {
+		route.urlSpace = urlJoin(optPath, r.urlSpace)
+		delete(opt, "path")
+	}
+
+	if optModule, ok := opt["module"]; ok {
+		route.moduleSpace = urlJoin(optModule, r.moduleSpace)
+		delete(opt, "module")
+	}
+	route.fullpath = urlJoin(route.urlSpace, path)
+	return &route
 }
