@@ -16,6 +16,12 @@ func Draw() {
 		scope.GET("/home2/:name", H{"to": "home#index"})
 	}
 
+	scope = Scope(H{"module": "admin"})
+	{
+		scope.GET("/home1/:name", H{"to": "home#index"})
+		scope.GET("/home2/:name", H{"to": "home#index"})
+	}
+
 	namespace := Namespace("admin")
 	{
 		namespace.GET("/homea/:name", H{"to": "home#index"})
