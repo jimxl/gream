@@ -53,7 +53,7 @@ func (s *route) parseControllerAndAction() {
 }
 
 func (s *route) createController(c *http_router.Context) error {
-	fmt.Println(s)
+	fmt.Printf("%+v\n", s)
 	controllerType := controller.GetController(s.controller)
 	if controllerType == nil {
 		err := errors.New("controller invalid")

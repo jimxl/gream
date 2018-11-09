@@ -1,4 +1,4 @@
-package scope
+package admin
 
 import (
 	"gbs/gream/web"
