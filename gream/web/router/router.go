@@ -7,6 +7,8 @@ import (
 	"gbs/gream/web/http_router"
 )
 
+var ApplicationRouterDraw func()
+
 var r = &Router{}
 
 var (

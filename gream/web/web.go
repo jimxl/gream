@@ -6,6 +6,7 @@ import (
 )
 
 func Run() {
+	router.ApplicationRouterDraw()
 	http_router.Run()
 }
 
