@@ -6,9 +6,9 @@ import (
 
 func Draw() {
 
-	GET("/home/:name", "home#index")
-	GET("/home_json/:name", "home#index_json")
-	GET("/scope_home/:name", "scope/home#index")
+	GET("/home/:name", H{"to": "home#index"})
+	GET("/home_json/:name", H{"to": "home#index_json"})
+	GET("/scope_home/:name", H{"to": "scope/home#index"})
 
 	// scope := Scope("scope")
 	// {
