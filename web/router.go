@@ -32,7 +32,7 @@ func init() {
 			namespace.GET("/homeb/:name", H{"to": "home#index"})
 		}
 
-		// r.Resources("users")
+		Resources("users")
 	}
 
 }
