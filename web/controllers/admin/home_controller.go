@@ -1,13 +1,8 @@
 package admin
 
 import (
-	"gbs/gream/web"
 	"gbs/gream/web/controller"
 )
-
-func init() {
-	web.Register(&HomeController{})
-}
 
 type HomeController struct {
 	controller.BaseController

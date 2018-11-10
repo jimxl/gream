@@ -4,10 +4,6 @@ import (
 	"gbs/gream/web"
 )
 
-func init() {
-	web.Register(&HomeController{})
-}
-
 type HomeController struct {
 	web.BaseController
 }
