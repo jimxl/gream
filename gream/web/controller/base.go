@@ -8,8 +8,10 @@ import (
 
 type BaseController struct {
 	context *http_router.Context
-
 	RenderDefaultFile bool
+
+	beforeActions map[string] []Filter
+	afterActions map[string] []Filter
 }
 
 func (controller *BaseController) InitFromContext(c *http_router.Context) {
