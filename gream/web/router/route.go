@@ -63,13 +63,22 @@ func (s *route) createController(c *http_router.Context) error {
 	}
 	controllerInstance := reflect.New(controllerType.Elem())
 	fmt.Printf("0 %+v\n", controllerInstance)
-	method := controllerInstance.MethodByName("InitFromContext")
+	method := controllerInstance.MethodByName("InitFromContext_")
 	if !method.IsValid() {
 		err := errors.New("controller invalid")
 		logger.Error(err.Error())
 		return err
 	}
 	method.Call([]reflect.Value{reflect.ValueOf(c)})
+
+	method = controllerInstance.MethodByName("Init")
+	if !method.IsValid() {
+		err := errors.New("controller invalid")
+		logger.Error(err.Error())
+		return err
+	}
+	method.Call([]reflect.Value{})
+
 	s.controllerInstance = controllerInstance
 	return nil
 }
@@ -81,8 +90,8 @@ func (s *route) callAction() error {
 		logger.Error(err.Error())
 		return err
 	}
-	fmt.Printf("1 %+v\n", s.controllerInstance)
-	fmt.Printf("2 %+v\n", reflect.ValueOf(s.controllerInstance))
+	//fmt.Printf("1 %+v\n", s.controllerInstance)
+	//fmt.Printf("2 %+v\n", reflect.ValueOf(s.controllerInstance))
 	in := []reflect.Value{reflect.ValueOf(s.action), reflect.ValueOf(s.controllerInstance)}
 	//TODO: 为啥第二个参数不能直接用s.controllerInstance, 非要reflect.ValueOf包一下呢
 	action.Call(in)
