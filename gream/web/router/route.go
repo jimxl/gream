@@ -26,7 +26,7 @@ type route struct {
 	moduleSpace string
 	fullpath    string
 
-	controllerInstance *reflect.Value
+	controllerInstance reflect.Value
 }
 
 func (s *route) getHandle() func(*http_router.Context) {
@@ -62,6 +62,7 @@ func (s *route) createController(c *http_router.Context) error {
 		return err
 	}
 	controllerInstance := reflect.New(controllerType.Elem())
+	fmt.Printf("0 %+v\n", controllerInstance)
 	method := controllerInstance.MethodByName("InitFromContext")
 	if !method.IsValid() {
 		err := errors.New("controller invalid")
@@ -69,21 +70,21 @@ func (s *route) createController(c *http_router.Context) error {
 		return err
 	}
 	method.Call([]reflect.Value{reflect.ValueOf(c)})
-	s.controllerInstance = &controllerInstance
+	s.controllerInstance = controllerInstance
 	return nil
 }
 
 func (s *route) callAction() error {
-	action := s.controllerInstance.MethodByName(s.action)
+	action := s.controllerInstance.MethodByName("CallActionWithFilter")
 	if !action.IsValid() {
 		err := errors.New("action invalid")
 		logger.Error(err.Error())
 		return err
 	}
-	action.Call([]reflect.Value{})
-
-	// if controller.FieldByName("RenderDefaultFile").Bool() {
-	s.controllerInstance.MethodByName("Render").Call([]reflect.Value{})
-	// }
+	fmt.Printf("1 %+v\n", s.controllerInstance)
+	fmt.Printf("2 %+v\n", reflect.ValueOf(s.controllerInstance))
+	in := []reflect.Value{reflect.ValueOf(s.action), reflect.ValueOf(s.controllerInstance)}
+	//TODO: 为啥第二个参数不能直接用s.controllerInstance, 非要reflect.ValueOf包一下呢
+	action.Call(in)
 	return nil
 }
