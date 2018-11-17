@@ -21,6 +21,9 @@ func (f *FilterModule) BeforeAction(actionName string, filter Filter) {
 }
 
 func (f *FilterModule) afterAction(actionName string, filter Filter) {
+	if len(f.afterActions) == 0 {
+		f.afterActions = make(map[string][]Filter)
+	}
 	name := rstring.Downcase(actionName)
 	f.afterActions[name] = append(f.afterActions[name], filter)
 }
