@@ -4,9 +4,9 @@ import (
 	"gbs/gream/web/http_router"
 )
 
-var re *http_router.Engine
+var app *http_router.Application
 
 func init() {
-	re = http_router.Router()
-	http_router.Use(loggerMiddleWare())
+	app = http_router.Router()
+	//http_router.Use(loggerMiddleWare())
 }

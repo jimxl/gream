@@ -1,26 +1,14 @@
 package controllers
 
 import (
-	"fmt"
-	"gbs/gream/web"
+	. "gbs/gream/web/controller"
+	"gbs/gream/web/http_router"
 )
 
-type HomeController struct {
-	web.BaseController
-}
-
-func (c *HomeController) Init() {
-	fmt.Println("init controller")
-	c.BeforeAction("Index", func() bool {
-		fmt.Println("index action before action")
-		return true
+var _ = Controller("home", func() {
+	i := 1
+	Action("index", func(ctx http_router.Context) {
+		i = i + 1
+		ctx.Writef("%s, %v", "hello", i)
 	})
-}
-
-func (c *HomeController) IndexJson() {
-	c.RenderJson(&web.H{"name": c.Param("name")})
-}
-
-func (c *HomeController) Index() {
-	c.RenderText("hello " + c.Param("name"))
-}
+})
