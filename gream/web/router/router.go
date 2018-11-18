@@ -40,56 +40,45 @@ func withOpt(to string, opts []H, f func(opt H)) {
 	}
 }
 
+func handle(method, path, to string, opts []H) {
+	withOpt(to, opts, func(opt H) {
+		route := r.getRoute(path, opt)
+		http_router.Handle(method, route.fullpath, route.getHandle())
+	})
+}
+
 type Router struct {
 	urlSpace    string
 	moduleSpace string
 }
 
 func (r *Router) GET(path, to string, opts ...H) {
-	withOpt(to, opts, func(opt H) {
-		route := r.getRoute(http.MethodGet, path, opt)
-		http_router.GET(route.fullpath, route.getHandle())
-	})
+	handle(http.MethodGet, path, to, opts)
 }
 
 func (r *Router) POST(path, to string, opts ...H) {
-	withOpt(to, opts, func(opt H) {
-		route := r.getRoute(http.MethodPost, path, opt)
-		http_router.POST(route.fullpath, route.getHandle())
-	})
+	handle(http.MethodPost, path, to, opts)
 }
 
 func (r *Router) HEAD(path, to string, opts ...H) {
-	withOpt(to, opts, func(opt H) {
-		route := r.getRoute(http.MethodPost, path, opt)
-		http_router.HEAD(route.fullpath, route.getHandle())
-	})
+	handle(http.MethodHead, path, to, opts)
 }
 
 func (r *Router) PUT(path, to string, opts ...H) {
-	withOpt(to, opts, func(opt H) {
-		route := r.getRoute(http.MethodPost, path, opt)
-		http_router.PUT(route.fullpath, route.getHandle())
-	})
+	handle(http.MethodPut, path, to, opts)
 }
 
 func (r *Router) PATCH(path, to string, opts ...H) {
-	withOpt(to, opts, func(opt H) {
-		route := r.getRoute(http.MethodPost, path, opt)
-		http_router.PATCH(route.fullpath, route.getHandle())
-	})
+	handle(http.MethodPatch, path, to, opts)
 }
 
 func (r *Router) DELETE(path, to string, opts ...H) {
-	withOpt(to, opts, func(opt H) {
-		route := r.getRoute(http.MethodDelete, path, opt)
-		http_router.DELETE(route.fullpath, route.getHandle())
-	})
+	handle(http.MethodDelete, path, to, opts)
 }
 
 func (r *Router) Any(path, to string, opts ...H) {
 	withOpt(to, opts, func(opt H) {
-		route := r.getRoute(http.MethodDelete, path, opt)
+		route := r.getRoute(path, opt)
 		http_router.Any(route.fullpath, route.getHandle())
 	})
 }
@@ -129,11 +118,10 @@ func (r *Router) Scope(arg interface{}) *Router {
 	return &router
 }
 
-func (r *Router) getRoute(method, path string, opt H) *route {
+func (r *Router) getRoute(path string, opt H) *route {
 	route := route{
 		path:        path,
 		opt:         opt,
-		method:      http.MethodGet,
 		urlSpace:    r.urlSpace,
 		moduleSpace: r.moduleSpace,
 	}

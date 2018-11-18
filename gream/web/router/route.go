@@ -13,7 +13,6 @@ var controllerScopeRe = regexp.MustCompile("(\\w*/)?(\\w*)#(\\w*)$")
 
 type route struct {
 	path        string
-	method      string
 	opt         H
 	controller  string
 	action      string
