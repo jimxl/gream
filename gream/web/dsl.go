@@ -10,3 +10,8 @@ type Context = http_router.Context
 
 var Controller = controller.Controller
 var Action = controller.Action
+
+var BeforeAction = controller.BeforeAction
+var AfterAction = controller.AfterAction
+var BeforeAll = controller.BeforeAll
+var AfterAll = controller.AfterAll
