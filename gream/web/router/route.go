@@ -25,7 +25,7 @@ type route struct {
 func (s *route) getHandle() func(http_router.Context) {
 	s.parseControllerAndAction()
 	return func(ctx http_router.Context) {
-		controller.DoAction(s.controller, s.action, ctx)
+		controller.DoAction_(s.controller, s.action, ctx)
 	}
 }
 

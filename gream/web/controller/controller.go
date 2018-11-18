@@ -40,7 +40,7 @@ func Action(name string, actionBody ActionI) {
 	currentController.addAction(name, actionBody)
 }
 
-func DoAction(cName, aName string, ctx http_router.Context) {
+func DoAction_(cName, aName string, ctx http_router.Context) {
 	if wc, ok := controllers[cName]; ok {
 		if action, ok := wc.actions[aName]; ok {
 			action(ctx)

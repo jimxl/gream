@@ -1,6 +1,6 @@
 # gbs
 
-Dream Web Framework write by golang
+Gream is a Dream Web Framework written in Go(Golang)
 
 ## Router
 
