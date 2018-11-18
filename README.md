@@ -1,10 +1,10 @@
 # gbs
 
-golang 类似 Rails的框架
+Dream Web Framework write by golang
 
-## 路由
+## Router
 
-```golang
+```go
 GET("/home/:name", H{"to": "home#index"})
 GET("/home_json/:name", H{"to": "home#index_json"})
 GET("/scope_home/:name", H{"to": "admin/home#index"})
@@ -31,4 +31,22 @@ namespace := Namespace("admin")
 }
 
 Resources("users")
+```
+
+## Controller and Action
+
+```go
+package controllers
+
+import (
+	. "gbs/gream/web"
+)
+
+func init() {
+	Controller("home")
+
+	Action("index", func(ctx Context) {
+		ctx.Writef("%s", "hello")
+	})
+}
 ```

@@ -26,14 +26,13 @@ func makeWebController() *WebController {
 	return wc
 }
 
-func Controller(name string, controllerBody func()) bool {
+func Controller(name string) bool {
 	wc, ok := controllers[name]
 	if !ok {
 		wc = makeWebController()
 		controllers[name] = wc
 	}
 	currentController = wc
-	controllerBody()
 	return true
 }
 
