@@ -2,7 +2,6 @@ package router
 
 import (
 	"gbs/rgo/rmap"
-	"gbs/rgo/rstring"
 	"net/http"
 	"path/filepath"
 
@@ -81,19 +80,6 @@ func (r *Router) Any(path, to string, opts ...H) {
 		route := r.getRoute(path, opt)
 		http_router.Any(route.fullpath, route.getHandle())
 	})
-}
-
-func (r *Router) Resources(name string, opts ...H) {
-	pluralName := rstring.Plural(name)
-
-	r.GET(urlJoin("/", pluralName), pluralName+"#index", opts...)
-	r.GET(urlJoin("/", pluralName, "new"), pluralName+"#new", opts...)
-	r.POST(urlJoin("/", pluralName), pluralName+"#create", opts...)
-	r.GET(urlJoin("/", pluralName, "{id}"), pluralName+"#show", opts...)
-	r.GET(urlJoin("/", pluralName, "{id}/edit"), pluralName+"#edit", opts...)
-	r.PUT(urlJoin("/", pluralName, "{id}"), pluralName+"#update", opts...)
-	r.PATCH(urlJoin("/", pluralName, "{id}"), pluralName+"#update", opts...)
-	r.DELETE(urlJoin("/", pluralName, "{id}"), pluralName+"#destroy", opts...)
 }
 
 func (r *Router) Namespace(space string) *Router {
