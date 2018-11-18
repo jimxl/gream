@@ -8,6 +8,6 @@ func init() {
 	Controller("home")
 
 	Action("index", func(ctx Context) {
-		ctx.Writef("%s", "hello")
+		ctx.Writef("hello, %s", ctx.Params().GetString("name"))
 	})
 }

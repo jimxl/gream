@@ -1,14 +1,11 @@
 package admin
 
-//
-//import (
-//	"gbs/gream/web/controller"
-//)
-//
-//type HomeController struct {
-//	controller.BaseController
-//}
-//
-//func (c *HomeController) Index() {
-//	c.RenderText("scope home controller: hello " + c.Param("name"))
-//}
+import . "gbs/gream/web"
+
+func init() {
+	Controller("admin/home")
+
+	Action("index", func(ctx Context) {
+		ctx.Writef("admin home controller hello, %s", ctx.Params().GetString("name"))
+	})
+}
