@@ -30,7 +30,49 @@ var resourcesMethods = map[string]func(string, *Router, []H){
 func (r *Router) Resources(name string, opts ...H) {
 	pluralName := rstring.Plural(name)
 
-	for _, method := range resourcesMethods {
-		method(pluralName, r, opts)
+	methods := map[string]bool{
+		"index":   true,
+		"new":     true,
+		"create":  true,
+		"show":    true,
+		"edit":    true,
+		"update":  true,
+		"destroy": true,
+	}
+
+	if len(opts) >= 1 {
+		if only, ok := opts[0]["only"]; ok {
+			methods = map[string]bool{
+				"index":   false,
+				"new":     false,
+				"create":  false,
+				"show":    false,
+				"edit":    false,
+				"update":  false,
+				"destroy": false,
+			}
+			for _, ms := range rstring.Split(only, ",") {
+				methods[ms] = true
+			}
+		} else if except, ok := opts[0]["except"]; ok {
+			methods = map[string]bool{
+				"index":   true,
+				"new":     true,
+				"create":  true,
+				"show":    true,
+				"edit":    true,
+				"update":  true,
+				"destroy": true,
+			}
+			for _, ms := range rstring.Split(except, ",") {
+				methods[ms] = false
+			}
+		}
+	}
+
+	for key, ok := range methods {
+		if ok {
+			resourcesMethods[key](pluralName, r, opts)
+		}
 	}
 }
