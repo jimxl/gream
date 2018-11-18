@@ -1,36 +1,37 @@
-# gbs
+# Gream
 
 Gream is a Dream Web Framework written in Go(Golang)
 
 ## Router
 
 ```go
-GET("/home/{name}", H{"to": "home#index"})
-GET("/home_json/{name}", H{"to": "home#index_json"})
-GET("/admin_home/{name}", H{"to": "admin/home#index"})
+GET("/home/{name}", "home#index")
+GET("/home_json/{name}", "home#index_json")
+GET("/admin_home/{name}", "admin/home#index")
 
 scope := Scope("scope")
 {
-    scope.GET("/home1/{name}", H{"to": "home#index"})
-    scope.GET("/home2/{name}", H{"to": "home#index"})
+    scope.GET("/home1/{name}", "home#index")
+    scope.GET("/home2/{name}", "home#index")
 }
 
 scope = Scope(H{"module": "admin"})
 {
-    scope.GET("/home1/{name}", H{"to": "home#index"})
-    scope.GET("/home2/{name}", H{"to": "home#index"})
+    scope.GET("/home1/{name}", "home#index")
+    scope.GET("/home2/{name}", "home#index")
 }
 
-GET("/home_path/{name}", H{"to": "home#index", "path": "ttt"})
-GET("/home_module/{name}", H{"to": "home#index", "module": "admin"})
+GET("/home_path/{name}", "home#index", H{"path": "ttt"})
+GET("/home_module/{name}", "home#index", H{"module": "admin"})
 
 namespace := Namespace("admin")
 {
-    namespace.GET("/homea/{name}", H{"to": "home#index"})
-    namespace.GET("/homeb/{name}", H{"to": "home#index"})
+    namespace.GET("/homea/{name}", "home#index")
+    namespace.GET("/homeb/{name}", "home#index")
 }
 
-Resources("users")
+//Resources("users", H{"except": "index"})
+Resources("users", H{"only": "index,new"})
 ```
 
 ## Controller and Action
