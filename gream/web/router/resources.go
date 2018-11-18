@@ -42,6 +42,7 @@ func (r *Router) Resources(name string, opts ...H) {
 
 	if len(opts) >= 1 {
 		if only, ok := opts[0]["only"]; ok {
+			delete(opts[0], "only")
 			methods = map[string]bool{
 				"index":   false,
 				"new":     false,
@@ -55,6 +56,7 @@ func (r *Router) Resources(name string, opts ...H) {
 				methods[ms] = true
 			}
 		} else if except, ok := opts[0]["except"]; ok {
+			delete(opts[0], "except")
 			methods = map[string]bool{
 				"index":   true,
 				"new":     true,
