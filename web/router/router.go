@@ -1,11 +1,11 @@
 package router
 
 import (
-	"gbs/rgo/rmap"
+	"github.com/jimxl/gream/rgo/rmap"
 	"net/http"
 	"path/filepath"
 
-	"gbs/gream/web/http_router"
+	"github.com/jimxl/gream/web/http_router"
 )
 
 var ApplicationRouterDraw func()

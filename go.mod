@@ -13,6 +13,7 @@ require (
 	github.com/gin-gonic/gin v0.0.0-20180420022744-dfe37ea6f1b9
 	github.com/golang/protobuf v1.0.0
 	github.com/huandu/xstrings v1.2.0
+	github.com/imdario/mergo v0.3.6
 	github.com/iris-contrib/blackfriday v2.0.0+incompatible // indirect
 	github.com/iris-contrib/formBinder v0.0.0-20171010160137-ad9fb86c356f // indirect
 	github.com/iris-contrib/go.uuid v2.0.0+incompatible // indirect

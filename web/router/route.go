@@ -1,12 +1,12 @@
 package router
 
 import (
-	"gbs/gream/web/controller"
+	"github.com/jimxl/gream/web/controller"
 	"path/filepath"
 	"regexp"
 
-	"gbs/gream/web/http_router"
-	"gbs/rgo/rstring"
+	"github.com/jimxl/gream/rgo/rstring"
+	"github.com/jimxl/gream/web/http_router"
 )
 
 var controllerScopeRe = regexp.MustCompile("(\\w*/)?(\\w*)#(\\w*)$")

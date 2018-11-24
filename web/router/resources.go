@@ -1,6 +1,6 @@
 package router
 
-import "gbs/rgo/rstring"
+import "github.com/jimxl/gream/rgo/rstring"
 
 var resourcesMethods = map[string]func(string, *Router, []H){
 	"index": func(pluralName string, r *Router, opts []H) {
