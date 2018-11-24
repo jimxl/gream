@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"gbs/gream/web/http_router"
+	"github.com/jimxl/gream/web/http_router"
 )
 
 var app *http_router.Application

@@ -2,8 +2,8 @@ package controller
 
 //
 import (
-	"gbs/gream/web/http_router"
-	"gbs/rgo/rstring"
+	"github.com/jimxl/gream/rgo/rstring"
+	"github.com/jimxl/gream/web/http_router"
 )
 
 // TODO: 对于All filter 可以把action的名字传进去, 方便判断。还可以实现skip_filter 这样的方法

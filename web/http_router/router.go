@@ -1,7 +1,7 @@
 package http_router
 
 import (
-	"gbs/gream/config"
+	"github.com/jimxl/gream/config"
 	"github.com/kataras/iris"
 )
 

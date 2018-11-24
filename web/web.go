@@ -1,8 +1,8 @@
 package web
 
 import (
-	"gbs/gream/web/http_router"
-	"gbs/gream/web/router"
+	"github.com/jimxl/gream/web/http_router"
+	"github.com/jimxl/gream/web/router"
 )
 
 func Run() {

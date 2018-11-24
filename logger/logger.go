@@ -3,7 +3,7 @@ package logger
 import (
 	"os"
 
-	"gbs/gream/env"
+	"github.com/jimxl/gream/env"
 
 	"github.com/sirupsen/logrus"
 )
