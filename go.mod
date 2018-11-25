@@ -12,6 +12,7 @@ require (
 	github.com/gin-contrib/sse v0.0.0-20170109093832-22d885f9ecc7
 	github.com/gin-gonic/gin v0.0.0-20180420022744-dfe37ea6f1b9
 	github.com/golang/protobuf v1.0.0
+	github.com/gorilla/securecookie v1.1.1 // indirect
 	github.com/huandu/xstrings v1.2.0
 	github.com/imdario/mergo v0.3.6
 	github.com/iris-contrib/blackfriday v2.0.0+incompatible // indirect
