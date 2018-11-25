@@ -3,9 +3,16 @@ package http_router
 import (
 	"github.com/jimxl/gream/config"
 	"github.com/kataras/iris"
+	"github.com/kataras/iris/sessions"
 )
 
-var app = &Application{iris.Default()}
+var (
+	app  = &Application{iris.Default()}
+	sess = sessions.New(sessions.Config{
+		Cookie:       config.App.SessionID,
+		AllowReclaim: true,
+	})
+)
 
 func init() {
 	//app.Use(recover.New())

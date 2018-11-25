@@ -3,6 +3,7 @@ package http_router
 import (
 	"github.com/jimxl/gream/logger"
 	"github.com/kataras/iris"
+	"github.com/kataras/iris/sessions"
 	"path/filepath"
 )
 
@@ -10,6 +11,7 @@ func NewContext(ctx iris.Context) *Context {
 	return &Context{
 		irisContext: ctx,
 		isRender:    false,
+		session:     sess.Start(ctx),
 	}
 }
 
@@ -20,6 +22,7 @@ type Context struct {
 	ActionName     string
 
 	isRender bool
+	session  *sessions.Session
 }
 
 func (ctx *Context) Params(name string) string {
@@ -28,11 +31,11 @@ func (ctx *Context) Params(name string) string {
 
 func (ctx *Context) SetSession(key, value string) {
 	// TODO: add session options, 例如 有效时间等
-	ctx.irisContext.SetCookieKV(key, value)
+	ctx.session.Set(key, value)
 }
 
 func (ctx *Context) Session(key string) string {
-	return ctx.irisContext.GetCookie(key)
+	return ctx.session.GetString(key)
 }
 
 func (ctx *Context) RenderText(body string) error {
