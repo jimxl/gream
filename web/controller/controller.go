@@ -66,9 +66,10 @@ func AfterAll(filter Filter) {
 	currentController.AfterAll(filter)
 }
 
-func DoAction_(cName, aName string, ctx http_router.Context) {
+func DoAction_(cName, aName string, ctx *http_router.Context) {
 	if wc, ok := controllers[cName]; ok {
-		ctx.Values().Set("controller", cName)
+		ctx.ControllerName = cName
 		wc.CallActionWithFilter(aName, ctx)
+		ctx.Render()
 	}
 }

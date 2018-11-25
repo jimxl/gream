@@ -23,8 +23,6 @@ type Application struct {
 	*iris.Application
 }
 
-type Context = iris.Context
-
 type H = iris.Map
 type Handler = iris.Handler
 

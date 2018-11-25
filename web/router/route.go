@@ -2,11 +2,12 @@ package router
 
 import (
 	"github.com/jimxl/gream/web/controller"
+	"github.com/jimxl/gream/web/http_router"
+	"github.com/kataras/iris"
 	"path/filepath"
 	"regexp"
 
 	"github.com/jimxl/gream/rgo/rstring"
-	"github.com/jimxl/gream/web/http_router"
 )
 
 var controllerScopeRe = regexp.MustCompile("(\\w*/)?(\\w*)#(\\w*)$")
@@ -21,10 +22,10 @@ type route struct {
 	fullpath    string
 }
 
-func (s *route) getHandle() func(http_router.Context) {
+func (s *route) getHandle() func(iris.Context) {
 	s.parseControllerAndAction()
-	return func(ctx http_router.Context) {
-		controller.DoAction_(s.controller, s.action, ctx)
+	return func(ctx iris.Context) {
+		controller.DoAction_(s.controller, s.action, http_router.NewContext(ctx))
 	}
 }
 

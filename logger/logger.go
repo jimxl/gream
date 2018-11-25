@@ -1,11 +1,9 @@
 package logger
 
 import (
-	"os"
-
 	"github.com/jimxl/gream/env"
-
 	"github.com/sirupsen/logrus"
+	"os"
 )
 
 type Fields = logrus.Fields
