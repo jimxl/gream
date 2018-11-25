@@ -26,6 +26,15 @@ func (ctx *Context) Params(name string) string {
 	return ctx.irisContext.Params().Get(name)
 }
 
+func (ctx *Context) SetSession(key, value string) {
+	// TODO: add session options, 例如 有效时间等
+	ctx.irisContext.SetCookieKV(key, value)
+}
+
+func (ctx *Context) Session(key string) string {
+	return ctx.irisContext.GetCookie(key)
+}
+
 func (ctx *Context) RenderText(body string) error {
 	_, err := ctx.irisContext.WriteString(body)
 	ctx.isRender = true
