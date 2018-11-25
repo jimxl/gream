@@ -41,7 +41,7 @@ package controllers
 
 import (
 	"fmt"
-	. "gbs/gream/web"
+	. "github.com/jimxl/gream/web"
 )
 
 func init() {
