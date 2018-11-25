@@ -44,9 +44,9 @@ func (ctx *Context) Render(name ...string) {
 		var templateFilePath string
 		// TODO: 获取的view文件的最后可以加上请求的类型 例如, xxx.html 目前都是默认html
 		if len(name) <= 0 {
-			templateFilePath = filepath.Join(ctx.ControllerName, ctx.ActionName, ".html")
+			templateFilePath = filepath.Join(ctx.ControllerName, ctx.ActionName+".html")
 		} else {
-			templateFilePath = filepath.Join(name[0], ".html")
+			templateFilePath = filepath.Join(name[0] + ".html")
 		}
 		logger.Info("渲染html view:" + templateFilePath)
 	}
