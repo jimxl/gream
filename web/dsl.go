@@ -6,7 +6,10 @@ import (
 )
 
 type H = http_router.H
-type Context = http_router.Context
+
+//type Context = http_router.Context
+
+type Context = controller.Context
 
 var Controller = controller.Controller
 var Action = controller.Action

@@ -68,7 +68,7 @@ func AfterAll(filter Filter) {
 
 func DoAction_(cName, aName string, ctx *http_router.Context) {
 	if wc, ok := controllers[cName]; ok {
-		ctx.ControllerName = cName
+		ctx.ControllerName_ = cName
 		wc.CallActionWithFilter(aName, ctx)
 		ctx.Render()
 	}

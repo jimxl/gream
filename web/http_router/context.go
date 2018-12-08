@@ -18,11 +18,19 @@ func NewContext(ctx iris.Context) *Context {
 type Context struct {
 	irisContext iris.Context
 
-	ControllerName string
-	ActionName     string
+	ControllerName_ string
+	ActionName_     string
 
 	isRender bool
 	session  *sessions.Session
+}
+
+func (ctx *Context) ControllerName() string {
+	return ctx.ControllerName_
+}
+
+func (ctx *Context) ActionName() string {
+	return ctx.ActionName_
 }
 
 func (ctx *Context) Params(name string) string {
@@ -38,16 +46,14 @@ func (ctx *Context) Session(key string) string {
 	return ctx.session.GetString(key)
 }
 
-func (ctx *Context) RenderText(body string) error {
-	_, err := ctx.irisContext.WriteString(body)
+func (ctx *Context) RenderText(body string) {
+	ctx.irisContext.WriteString(body)
 	ctx.isRender = true
-	return err
 }
 
-func (ctx *Context) RenderTextf(format string, values ...interface{}) error {
-	_, err := ctx.irisContext.Writef(format, values...)
+func (ctx *Context) RenderTextf(format string, values ...interface{}) {
+	ctx.irisContext.Writef(format, values...)
 	ctx.isRender = true
-	return err
 }
 
 func (ctx *Context) Render(name ...string) {
@@ -56,7 +62,7 @@ func (ctx *Context) Render(name ...string) {
 		var templateFilePath string
 		// TODO: 获取的view文件的最后可以加上请求的类型 例如, xxx.html 目前都是默认html
 		if len(name) <= 0 {
-			templateFilePath = filepath.Join(ctx.ControllerName, ctx.ActionName+".html")
+			templateFilePath = filepath.Join(ctx.ControllerName(), ctx.ActionName()+".html")
 		} else {
 			templateFilePath = filepath.Join(name[0] + ".html")
 		}
