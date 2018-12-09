@@ -11,4 +11,6 @@ type Context interface {
 	RenderTextf(format string, values ...interface{})
 	Render(name ...string)
 	RedirectTo(url string, statusHeader ...int)
+
+	ToView(name string, value interface{})
 }

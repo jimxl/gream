@@ -13,6 +13,7 @@ func NewContext(ctx iris.Context) *Context {
 		irisContext: ctx,
 		isRender:    false,
 		session:     sess.Start(ctx),
+		viewValues:  make(map[string]interface{}), // 申请5的长度用于cache
 	}
 }
 
@@ -24,6 +25,8 @@ type Context struct {
 
 	isRender bool
 	session  *sessions.Session
+
+	viewValues map[string]interface{}
 }
 
 func (ctx *Context) ControllerName() string {
@@ -45,6 +48,10 @@ func (ctx *Context) SetSession(key, value string) {
 
 func (ctx *Context) Session(key string) string {
 	return ctx.session.GetString(key)
+}
+
+func (ctx *Context) ToView(name string, value interface{}) {
+	ctx.viewValues[name] = value
 }
 
 func (ctx *Context) RenderText(body string) {
@@ -69,6 +76,9 @@ func (ctx *Context) Render(name ...string) {
 		}
 		logger.Info("渲染html view:" + templateFilePath)
 		actionView := view.Create(templateFilePath)
+		for name, value := range ctx.viewValues {
+			actionView.Set(name, value)
+		}
 		ctx.irisContext.WriteString(actionView.Render())
 		// TODO: https://github.com/gobuffalo/plush 或者 https://github.com/CloudyKit/jet 模板是比较好的
 		// TODO: 开发模式下应该每次都读view文件，生产环境下应该打包到内存中存储起来，这样就不用和html文件导出拷贝了，一个可执行程序就行
