@@ -2,6 +2,7 @@ package http_router
 
 import (
 	"github.com/jimxl/gream/logger"
+	"github.com/jimxl/gream/web/view"
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/sessions"
 	"path/filepath"
@@ -67,6 +68,8 @@ func (ctx *Context) Render(name ...string) {
 			templateFilePath = filepath.Join(name[0] + ".html")
 		}
 		logger.Info("渲染html view:" + templateFilePath)
+		actionView := view.Create(templateFilePath)
+		ctx.irisContext.WriteString(actionView.Render())
 		// TODO: https://github.com/gobuffalo/plush 或者 https://github.com/CloudyKit/jet 模板是比较好的
 		// TODO: 开发模式下应该每次都读view文件，生产环境下应该打包到内存中存储起来，这样就不用和html文件导出拷贝了，一个可执行程序就行
 	}
