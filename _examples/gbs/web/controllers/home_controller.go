@@ -8,8 +8,8 @@ import (
 func init() {
 	Controller("home")
 
-	BeforeAll(allFilter)
-	BeforeAction("index", indexFilter)
+	BeforeAction(allFilter)
+	BeforeAction(indexFilter, H{"only": "index,test_render"})
 
 	Action("index", func(ctx Context) {
 		ctx.SetSession("key", "value1")

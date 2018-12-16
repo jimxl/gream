@@ -2,10 +2,10 @@ package web
 
 import (
 	"github.com/jimxl/gream/web/controller"
-	"github.com/jimxl/gream/web/http_router"
 )
 
-type H = http_router.H
+//type H = http_router.H
+type H = map[string]string
 
 //type Context = http_router.Context
 
@@ -16,5 +16,3 @@ var Action = controller.Action
 
 var BeforeAction = controller.BeforeAction
 var AfterAction = controller.AfterAction
-var BeforeAll = controller.BeforeAll
-var AfterAll = controller.AfterAll

@@ -5,13 +5,17 @@ import (
 )
 
 type WebController struct {
+	parent  string
 	actions map[string]ActionI
 
-	beforeActions map[string][]Filter
-	afterActions  map[string][]Filter
+	beforeActions map[string][]filterN
+	afterActions  map[string][]filterN
 
-	beforeAll []Filter
-	afterAll  []Filter
+	beforeAll []filterN
+	afterAll  []filterN
+
+	skippedBeforeAll    []string
+	skippedBeforeAction map[string]string
 }
 
 func (wc *WebController) addAction(name string, actionBody ActionI) {
@@ -27,22 +31,29 @@ func init() {
 
 func makeWebController() *WebController {
 	wc := &WebController{
-		actions:       make(map[string]ActionI),
-		beforeActions: make(map[string][]Filter),
-		afterActions:  make(map[string][]Filter),
-		beforeAll:     []Filter{},
-		afterAll:      []Filter{},
+		actions:             make(map[string]ActionI),
+		beforeActions:       make(map[string][]filterN),
+		afterActions:        make(map[string][]filterN),
+		beforeAll:           []filterN{},
+		afterAll:            []filterN{},
+		skippedBeforeAll:    []string{},
+		skippedBeforeAction: make(map[string]string),
 	}
 	return wc
 }
 
-func Controller(name string) bool {
+func Controller(name string, parent ...string) bool {
 	wc, ok := controllers[name]
 	if !ok {
 		wc = makeWebController()
 		controllers[name] = wc
 	}
 	currentController = wc
+	if len(parent) >= 1 {
+		wc.parent = parent[0]
+	} else {
+		wc.parent = "application"
+	}
 	return true
 }
 
@@ -50,26 +61,18 @@ func Action(name string, actionBody ActionI) {
 	currentController.addAction(name, actionBody)
 }
 
-func BeforeAction(name string, filter Filter) {
-	currentController.BeforeAction(name, filter)
+func BeforeAction(filter Filter, opts ...H) {
+	currentController.BeforeAction(filter, opts...)
 }
 
-func AfterAction(name string, filter Filter) {
-	currentController.AfterAction(name, filter)
-}
-
-func BeforeAll(filter Filter) {
-	currentController.BeforeAll(filter)
-}
-
-func AfterAll(filter Filter) {
-	currentController.AfterAll(filter)
+func AfterAction(filter Filter, opts ...H) {
+	currentController.AfterAction(filter, opts...)
 }
 
 func DoAction_(cName, aName string, ctx *http_router.Context) {
 	if wc, ok := controllers[cName]; ok {
 		ctx.ControllerName_ = cName
-		wc.CallActionWithFilter(aName, ctx)
+		wc.callActionWithFilter(aName, ctx)
 		ctx.Render()
 	}
 }

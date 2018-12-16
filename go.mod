@@ -12,6 +12,7 @@ require (
 	github.com/gin-contrib/sse v0.0.0-20170109093832-22d885f9ecc7
 	github.com/gin-gonic/gin v0.0.0-20180420022744-dfe37ea6f1b9
 	github.com/gobuffalo/envy v1.6.11 // indirect
+	github.com/gobuffalo/flect v0.0.0-20181114183036-47375f6d8328
 	github.com/gobuffalo/github_flavored_markdown v1.0.7 // indirect
 	github.com/gobuffalo/plush v3.7.32+incompatible
 	github.com/gobuffalo/uuid v2.0.5+incompatible // indirect
